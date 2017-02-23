@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React avec TypeScript et ES6</title>
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="Formation React js, avec TypeScript et ES6"/>
+    <meta name="keywords"
+          content="bbl react, bbl reactjs, freelance, flux, redux, typescript, props, state, jsx"/>
+    <link rel="canonical" href="http://codox.fr/reactjs-formation"/>
+    <a href="https://google.com/+JeanBaptisteCazaux" rel="publisher"/>
+
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+        @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+        @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+        body {
+            font-family: 'Droid Serif';
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table th:nth-child(2), table tr td:nth-child(2) {
+            background-color: #6fa8dc;
+        }
+
+        table th:nth-child(3), table tr td:nth-child(3) {
+            background-color: #ea9999;
+        }
+
+        th, td {
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        li {
+            margin-bottom: .8em;
+        }
+
+        li:first-child {
+            margin-top: .8em;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Yanone Kaffeesatz';
+            font-weight: 400;
+            margin-bottom: 0;
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+        }
+
+        h2 {
+            font-size: 3em;
+        }
+
+        h3 {
+            font-size: 1.6em;
+        }
+
+        p {
+            margin: .5em 0;
+        }
+
+        .inverse {
+            background: #272822;
+            color: #777872;
+            text-shadow: 0 0 20px #333;
+        }
+
+        .inverse h1, .inverse h2 {
+            color: #f3f3f3;
+            line-height: 0.8em;
+        }
+
+        pre {
+            border-left: 0.4em solid #d7d7d7;
+            padding-left: 0.5em !important;
+            margin-top: .5em;
+            margin-bottom: 0;
+        }
+
+        code {
+            background: transparent !important;
+            padding-left: 0.2em !important;
+        }
+
+        a {
+            color: #F92672;
+            text-decoration: none;
+        }
+
+        .task {
+            float: right;
+            font-size: 0.9em;
+            padding-top: 0.6em;
+        }
+
+        .task a {
+            color: #080;
+            text-decoration: none;
+        }
+
+        .right {
+            float: right;
+            margin-left: 1em;
+        }
+
+        .pushdown {
+            margin-top: 12em;
+        }
+
+        .remark-code, .remark-inline-code {
+            font-family: 'Ubuntu Mono';
+        }
+    </style>
+</head>
+<body>
+<textarea id="source">
+
+class: center, middle, inverse
+
+# React
+### avec TypeScript 2 et ES6
+
+#### [@jbcazaux](http://twitter.com/jbcazaux)
+#### [http://codox.fr/react-ts-bbl](http://codox.fr/react-ts-bbl)
+
+---
+## Versions
+
+```json
+[...]
+"typescript": "2.1.6",
+"react": "15.4.2",
+"webpack": "2.2.1",
+[...]
+```
+---
+
+# Contenu
+
+* ES6
+    * Quelques nouveautés
+    * Rappels sur la programmation fonctionnelle
+* TypeScript 2
+    * Langage et mots-clés
+* ReactJS
+    * Principes
+    * Composants
+    * Etats (data)
+    * Redux
+    * Tests
+---
+
+class: center, middle, inverse
+
+# EcmaScript 6
+
+---
+template: default
+layout: true
+
+### EcmaScript 6
+
+---
+
+# ~~var~~, let, const
+
+```javascript
+    let foo = 'bar';
+    const MAX = 10;
+    const ttc = addTva(15);
+```
+---
+
+# ~~var~~, let, const
+
+```javascript
+    const user = {};
+    user.name = 'john'; // ok ?
+    user = {name: 'lea'}; // ok ?
+
+    const arr = ['a'];
+    arr.push('b'); // ok ?
+    arr = ['a', 'b']; // ok ?
+```
+---
+
+# Arrow functions
+
+```javascript
+    let add = (a, b) => {
+        return a + b;
+    }
+    let add = (a, b) => a + b
+```
+
+---
+
+# Attention !
+
+Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http://www.webbrowsercompatibility.com/es6/desktop/)
+* Transpiler (=>, let, const, ...)
+* Shim (Array.find(), ...)
+---
+
+# Spread operator
+
+```javascript
+    const odd = [1, 3, 5, 7, 9];
+    const even = [2, 4, 6, 8]
+    const all = [0];
+
+    all.push(odd);
+    all.push(even);
+
+    console.log(all) // ?
+```
+---
+
+# Spread operator
+
+```javascript
+    const odd = [1, 3, 5, 7, 9];
+    const even = [2, 4, 6, 8]
+    const all = [0];
+
+    all.push(...odd);
+    all.push(...even);
+
+    console.log(all) // ?
+```
+---
+# Destructuring
+
+```javascript
+    const foo = {a: 1, b: 2, c: 'bar'};
+    let {a} = foo;
+    console.log(a); // ?
+```
+---
+# Destructuring
+
+```javascript
+    const user = {};
+    user.firstname = 'john';
+    user.lastname = 'doe';
+
+    function displayUser(user) {
+        return user.firstname.concat(' ').concat(user.lastname);
+    }
+```
+---
+# Destructuring
+
+```javascript
+    const user = {};
+    user.firstname = 'john';
+    user.lastname = 'doe';
+
+    function displayUser(user) {
+        return user.firstname.concat(' ').concat(user.lastname);
+    }
+
+    function displayUser({firstname, lastname}) {
+        return firstname.concat(' ').concat(lastname);
+    }
+```
+---
+# Destructuring
+
+```javascript
+    const user = {};
+    user.firstname = 'john';
+    user.lastname = 'doe';
+
+    function displayUser(user) {
+        return user.firstname.concat(' ').concat(user.lastname);
+    }
+
+    function displayUser({firstname, lastname}) {
+        return firstname.concat(' ').concat(lastname);
+    }
+
+    const displayUser = ({firstname, lastname}) =>
+        firstname.concat(' ').concat(lastname);
+```
+---
+# Shorthand Notation
+```javascript
+    const foo = 1;
+    const bar = 2;
+
+    const longer = {
+        foo: foo,
+        bar: bar
+    }
+```
+---
+# Shorthand Notation
+```javascript
+    const foo = 1;
+    const bar = 2;
+
+    const longer = {
+        foo: foo,
+        bar: bar
+    }
+
+    const shorter = {
+        foo,
+        bar
+    }
+```
+
+---
+
+# Bonus
+
+* Object.assign
+```javascript
+    Object.assign({}, {a: 1, c: 3}, {a: 10, b: 2}) // = ?
+```
+
+* Map
+```javascript
+    const m = new Map();
+    m.set('foo', 2);
+    const bar = m.has('foo') ? m.get('foo') : 0;
+```
+
+* Set
+```javascript
+    const uniq = new Set([1, 2, 3, 1, 2, 3]);
+    uniq.length // ?
+```
+---
+# Rappels
+
+* currying
+```javascript
+    let add = function(x) {
+        return function(y) {
+            return x + y
+        }
+    }
+    add(2)(3) // ???
+```
+---
+# Rappels
+
+* currying
+```javascript
+    let add = function(x) {
+        return function(y) {
+            return x + y
+        }
+    }
+    add(2)(3) // 5 !
+
+    const add2 = add(2);
+    add2(3); // = ?
+```
+
+---
+# Rappels
+
+* currying
+```javascript
+    let add = function(x) {
+        return function(y) {
+            return x + y
+        }
+    }
+    let add = x => y => x + y // WTF ?!
+```
+---
+# Rappels
+
+* currying
+```javascript
+    let add = function(x) {
+        return function(y) {
+            return x + y
+        }
+    }
+    let add = x => y => x + y // WTF ?!
+
+    let add = x =>
+        y => (x + y);
+    // easy !
+```
+
+---
+# Rappels
+
+* this
+```javascript
+    function f() {
+        this.foo; // what is this ?
+    }
+```
+---
+
+class: center, middle, inverse
+layout: false
+# TypeScript 2
+
+---
+template: default
+layout: true
+
+### TypeScript 2
+
+---
+
+* Types de base: [https://www.typescriptlang.org/docs/handbook/basic-types.html](https://www.typescriptlang.org/docs/handbook/basic-types.html)
+* Interface
+```typescript
+    interface Props = {
+        lat: number;
+        lng: number;
+    }
+```
+* Classe
+```typescript
+    class User {
+        constructor(public id: number, public login: string) {}
+    }
+    let user1 = new User(1, 'toto');
+```
+---
+
+* Type
+```typescript
+    interface Props extends DispatchProps, StateProps {}
+    type Props = DispatchProps & StateProps;
+```
+* Génériques
+```typescript
+    function toArray<T>(arg1: T, arg2: T): T[] {
+        return [arg1, arg2];
+    }
+    toArray(5, 6);
+    toArray(5, 'hello'); // Bim !
+```
+
+---
+
+* Readonly
+```typescript
+    interface Props {
+        readonly user: User
+    }
+```
+```typescript
+    class User {
+        readonly id: string;
+        readonly login: string;
+        constructor(id: string, login: string) {
+            this.id = id;
+            this.login = login;
+        }
+    }
+```
+```typescript
+    let apps: ReadonlyArray<string> = ['app1', 'app2'];
+```
+
+---
+
+* @types -  Descriptions des librairies non TypeScript
+```
+$> npm install --save-dev @types/react
+```
+
+---
+
+* Typings - Avant TypeScript 2
+```
+$> typings search react
+    NAME                              SOURCE HOMEPAGE                                                      DESCRIPTION VERSIONS UPDATED
+react                             dt     http://facebook.github.io/react/                                          2        2016-08-17T20:12:27.000Z
+react-bootstrap                   dt     https://github.com/react-bootstrap/react-bootstrap                        1        2016-08-06T07:24:14.000Z
+$> typings install --save --global dt~react
+```
+
+
+---
+layout: false
+class: center, middle, inverse
+
+# React
+---
+
+template: default
+layout: true
+
+### Intro
+---
+
+#Hello world
+index.tsx
+```typescript
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
+import { Hello } from './hello';
+
+ReactDOM.render(
+    <Hello name="world"/>,
+    document.getElementById("app")
+);
+```
+hello.tsx
+```typescript
+import * as React from 'react';
+
+interface Props { name: string;}
+
+export class Hello extends React.Component<Props, void> {
+    render() {
+        return <h1>Hello {this.props.name}!</h1>;
+    }
+}
+```
+---
+
+#JSX
+```typescript
+render: function() {
+    return (
+      <li className="contact">
+          <h2 className="contact-name">{this.props.name}</h2>
+      </li>
+    )
+}
+```
+ou pas:
+```typescript
+render: function() {
+    return (
+      React.createElement('li', {className: 'contact'},
+        React.createElement('h2', {className: 'contact-name'},
+                                            this.props.name)
+      )
+    )
+}
+```
+---
+
+#Create or extends ?
+```typescript
+export const Hello = React.createClass<Props, void>({
+    render: function() {
+        return (
+            <h1>Hello {this.props.name}!</h1>
+        );
+    }
+});
+```
+```typescript
+export class Hello extends React.Component<Props, void>{
+    render() {
+        return (
+            <h1>Hello {this.props.name}!</h1>
+        );
+    }
+}
+```
+
+---
+layout: false
+
+#TP-01
+## Hello World !
+
+1. Etendre la classe React.Component
+2. Implémenter la méthode render()
+
+---
+
+template: default
+layout: true
+
+### React.Component
+
+---
+
+#Composant et Cycle de vie
+* seule **render()** est obligatoire
+* **getInitialState()**: invoqué une seule fois à la création du composant
+* **getDefaultProps()**: invoqué une seule fois aussi
+* **propTypes**, **mixins**, **statics**: plus tard... ;)
+* **componentWillMount()**: J'arrive !
+* **componentDidMount()**: Je suis là !
+* **componentWillReceiveProps(**nextProps: Object**)**
+* **shouldComponentUpdate(**nextProps: Object, nextState: Object**)**: Qu'est ce qu'on fait, chef ?
+* **componentWillUpdate(**nextProps: Object, nextState: object**)**: A l'attaque !
+* **componentDidUpdate(**nextProps: Object, nextState: object**)**: job done
+* **componentWillUnmount()**: bye bye !
+
+---
+# State
+
+* Définir l'état par défaut
+```typescript
+getInitialState() { return {...} }
+```
+```typescript
+this.state = {...}
+```
+* Définir un nouvel état
+```typescript
+this.setState({...})
+this.setState((prevState: State) => {...})
+```
+* Récupérer l'état courant
+```typescript
+this.state
+```
+
+---
+# Props vs State
+* Props
+    * Les données passées par les parents
+* State
+    * A faire
+        * Les données modifiables par les événements de la UI
+        * Le plus possible de composants sans état
+    * A ne pas faire
+        * Des données calculées (à faire dans render)
+        * Des données dérivées des *props*
+        * Des composants
+
+---
+#Stateless component
+```typescript
+import * as React from "react";
+
+interface Props { readonly name: string;}
+
+export const Hello = (props: Props) => <h1>Hello {props.name}!</h1>;
+```
+
+---
+
+template: default
+layout: true
+
+### Tips
+
+---
+
+# Itérer sur un tableau
+```typescript
+render() {
+    return (
+        ...
+        {
+            items.map(item => <div key={item.id}>{item.label}</div>)
+        }
+        ...
+    )
+}
+```
+---
+layout: false
+
+#TP-02
+## Liste de courses
+1. Installer les définitions de type d'axios
+2. Faire compiler le code (interfaces Props et State)
+3. Mettre un état par défaut
+4. Afficher un message de log pour chaque moment du cycle de vie
+5. Créer un composant distinct pour les éléments (li) de la liste
+6. Bonus: Utiliser une classe qui encapsule le composant "liste" pour gérer l'appel au serveur, et transmettre les data
+en tant que *props*
+---
+#Bonus TP-02
+```typescript
+export class ShoppingList extends React.Component<Props, State> {
+    // constructor...
+    // componentDidMount() {...}
+    render() {
+        return (
+            <ShoppingListInternal
+                    title={this.props.title}
+                    items={this.state.items}/>
+        )
+    }
+}
+
+type PropsInt = Props & State;
+const ShoppingListInternal = ({title, items}: PropsInt) => (
+    <div>
+        <h2>{title}</h2>
+        <ul>
+            {
+                items.map(item => <ShoppingItem key={item.id} item={item}/>)
+            }
+        </ul>
+    </div>
+)
+```
+---
+
+template: default
+layout: true
+
+### Callbacks
+
+---
+# Passer des fonctions dans Props
+```typescript
+export class ShoppingList extends React.Component<Props, State> {
+    // constructor...
+    // componentDidMount() {...}
+    deleteItem() {
+        let newItems = this.state.items.slice(1);
+        this.setState({items: newItems});
+    }
+    render() {
+        return (<ShoppingListInternal
+                    title={this.props.title}
+                    items={this.state.items}
+                    del={this.deleteItem.bind(this)}/>)
+    }
+}
+interface PropsInt {readonly title: string;
+    readonly items: ReadonlyArray<Item>;readonly del: () => void}
+const ShoppingListInternal = ({title, items, del}: PropsInt) => (
+    <div>
+        <h2>{title}</h2>
+        <ul>
+            {items.map(item => {
+                return (<li onClick={del}>
+                        <span>{item.label}</span>:<span>{item.price}€</span>
+                        </li>
+                )})}
+        </ul>
+    </div>
+);
+```
+---
+
+template: default
+layout: true
+
+### Avec du style
+
+---
+#inline style vs css
+
+Pourquoi pas du inline ?
+
+```typescript
+render() {
+	const mystyle = {
+		backgroundColor: '#F0ABCD'
+	}
+	return <div style={mystyle}>
+}
+```
+Sinon une CSS globale, ou une CSS par composant (Webpack powered)
+
+```typescript
+let css = require('./mycomponent.css');
+```
+---
+
+#React-bootstrap
+Adaptation des composants bootstrap à React
+```typescript
+<Button bsStyle="primary" onClick={this.handleClick.bind(this)}>Go!</Button>
+```
+
+La documentation
+* [https://react-bootstrap.github.io/components.html](https://react-bootstrap.github.io/components.html)
+* [http://getbootstrap.com/components/](http://getbootstrap.com/components/)
+
+---
+
+template: default
+layout: true
+
+### Tips
+
+---
+# Caractères spéciaux
+```typescript
+<span> Jet d{String.fromCharCode(39)}eau</span>
+```
+
+---
+
+# JSX if (else)
+if
+```typescript
+{this.state.user && <div>{this.state.user.login}</div>}
+```
+not
+```typescript
+{this.state.user || <div>No User</div>}
+```
+if-else
+```typescript
+{this.state.user ? <div>{this.state.user.login}</div> : <div>No User</div>}
+```
+---
+
+# Children
+
+```typescript
+interface Props {
+    readonly title: string;
+}
+
+export class ButtonApp extends React.Component<Props, void> {
+    render() {
+        return <Button {...this.props}>hello world</Button>
+    }
+}
+```
+```typescript
+interface ButtonProps {
+    readonly title: string;
+    readonly children?: any;
+}
+
+export const Button = ({title, children}: ButtonProps) => (
+    <button title={title}>
+        {children}
+    </button>
+);
+```
+---
+layout: false
+
+#TP-03
+## Liste des étudiants
+1. Installer react-bootstrap et ses définitions de type
+2. Afficher un champ texte qui permet de filtrer les éléments d'un tableau
+3. Afficher le nom de l'étudiant sur lequel on a cliqué, ou un message si aucun n'est sélectionné
+4. Bonus ES6: Calculer de façon élégante la moyenne des notes d'un élève (reduce)
+---
+
+# Rappels
+* Un composant a des propriétés et des états
+* Un composant stateless est plus maintenable et testable
+* On ne peut passer des propriétés qu'aux enfants (ce n'est pas de l'héritage;) )
+
+---
+layout: false
+class: center, middle, inverse
+
+# Flux & Redux
+---
+
+template: default
+layout: true
+
+### Flux & Redux
+
+---
+
+# Flux
+
+* Store: Stocker la donnée + Logique
+* Action: Modifier le modèle
+* Dispatcher: Répartir les actions dans les stores
+* View: Les composants UI
+
+![flux acton diagram](images/flux.png)
+
+**Le flux ne va que dans un seul sens !** (~~2-way binding~~)
+
+---
+
+# Bien / Pas bien
+
+![best practices](images/flux-bestpractice.png)
+
+* On ne met pas à jour directement les autres composants
+* On passe par le store (redux), les stores (flux), les observables (RxJs), ...
+
+---
+
+# Redux
+
+* Un store unique (pratique pour l'isomorphisme)
+* L'état du store est read-only
+* On émet des *actions* pour modifier l'état
+* Les actions sont interprétées par des *reducers*
+    * les *reducers* sont des fonctions *pures*
+    * les *reducers* prennent en entrée l'état précédent et une action
+    * ils retournent le nouvel état dans un objet immutable
+
+![redux](images/redux.png)
+
+---
+
+# Actions
+
+
+### Actions
+```typescript
+{type: 'INCREMENT', inc: 3}
+{type: 'ADD_TODO', text: 'Acheter du pain'}
+{type: 'SET_USER', user: new User(1, 'toto')}
+```
+### Interface
+```typescript
+export interface CounterAction {
+    type: string;
+    inc: number;
+}
+```
+### Action Creator
+```typescript
+export const incrementor = (inc: number): CounterAction => {
+    return {type: 'INCREMENT', inc: inc};
+};
+```
+
+![redux](images/redux.png)
+---
+
+# Reducer
+```typescript
+export const display =
+(state: number = 0, action: CounterAction) => {
+    switch (action.type) {
+        case 'INCREMENT':
+           return state + action.inc;
+        case 'DECREMENT':
+           return state - action.inc;
+        default:
+           return state;
+    }
+};
+```
+Le *state* est en read-only !
+![redux](images/redux.png)
+---
+
+# Store
+
+```typescript
+interface Store<S> {
+    dispatch: Dispatch<S>;
+    getState(): S;
+    subscribe(listener: () => void): Unsubscribe;
+    replaceReducer(nextReducer: Reducer<S>): void;
+}
+```
+* Le *store* garde l'état de l'application. On y accède via *getState()*.
+* ~~setState()~~ !! On modifie l'état en 'dispatchant' une action: *dispatch(filterWarnings(true))*
+* On peut être prévenu des changements du store via *subscribe(listener)*
+* On se désenregistre avec la méthode retournée par *subscribe*
+
+![redux](images/redux.png)
+
+---
+layout: false
+class: center, middle, inverse
+
+# React & Redux
+---
+
+template: default
+layout: true
+
+### React & Redux
+---
+
+# Composition de reducers - Approche naïve
+```typescript
+interface State = {readonly user: string; readonly counter: number;};
+const initialState = {user: '', counter: 0};
+export const myreducer =
+(state = initialState, action: any) => {
+    switch (action.type) {
+        case 'SET_USER':
+           return Object.assign({}, state, {user: action.user});
+        case 'INCREMENT':
+           return Object.assign({}, state, {counter: state.counter + 1});
+        case 'DECREMENT':
+           return Object.assign({}, state, {counter: state.counter - 1});
+        default:
+           return state;
+    }
+};
+```
+Ca peut faire lourd...!
+
+---
+
+# Composition de reducers - Découpage
+```typescript
+export const user =
+(state: string = '', action: UserAction) => {
+    switch (action.type) {
+        case 'SET_USER':
+           return action.user;
+        default:
+           return state;
+    }
+};
+export const counter =
+(state: number = 0, action: CounterAction) => {
+    switch (action.type) {
+        case 'INCREMENT':
+           return state + 1;
+        case 'DECREMENT':
+           return state - 1;
+        default:
+           return state;
+    }
+};
+```
+---
+
+# Composition de reducers - Effet Waouh
+```typescript
+interface State = {readonly user: string; readonly counter: number;};
+const initialState = {user: 'nobody', counter: 0};
+export const myreducer =
+(state = initialState, action: any) => {
+    return {
+        user: user(state.user, action),
+        counter: counter(state.counter, action)
+    }
+};
+```
+Et avec un peu de magie...
+```typescript
+import { combineReducers } from 'redux'
+export const myreducer = combineReducers({
+    user,
+    counter
+});
+```
+---
+
+# Récapitulatif
+
+- Actions
+- Reducers
+- Store
+- Composants React
+- Il reste à lier les composants au store !
+
+![redux](images/redux.png)
+
+---
+
+# Présentation et Conteneur
+
+* Les composants stateless sont simples à maintenir
+* Séparation des responsabilités
+
+![react-redux](images/conteneur-pres.png)
+
+---
+
+# Présentation et Conteneur
+
+** On découpe nos composants (connectés au *store*) en 2, *présentation* & *conteneur* **
+
+|               | Presentational Components         | Container Components                          |
+| ------------- |-----------------------------------| ----------------------------------------------|
+| Purpose	    |How things look (markup, styles)   | How things work (data fetching, state updates)|
+| Aware of Redux| No	                            | Yes                                           |
+| To read data  | Read data from props	            | Subscribe to Redux state                      |
+| To change data| Invoke callbacks from props       | Dispatch Redux actions                        |
+| Are written	| By hand                           | Usually generated by React Redux              |
+
+---
+
+# Connect
+
+* Le composant de présentation est comme les composants simples rencontrés jusque la (sans appels ajax)
+* Le composant conteneur va être généré automatiquement, ** mais **
+    * il faut décrire comment créer les *props* à partir des données du *store*: **mapStateToProps(state: State): StateProps {...}**
+    * il faut implémenter les callbacks qui seront injectés dans les *props*: **mapDispatchToProps(dispatch: Function): DispatchProps {...}**
+
+```typescript
+import {connect} from 'react-redux';
+
+export const MyComponent =
+    connect(mapStateToProps, mapDispatchToProps)(MyPresentationalComponent);
+```
+---
+
+## Composant de présentation:
+```typescript
+export const SelectCodePostal_ = ({cps, currentCp, onSelectCp}: Props) => (
+    <FormControl componentClass="select"
+                 onChange={onSelectCp}
+                 value={currentCp}>
+        {
+            cps.map((cp: number) => <option key={cp} value={cp}>{cp}</option> )
+        }
+    </FormControl>
+);
+```
+---
+
+## Conteneur
+```typescript
+interface StateProps {
+    readonly cps: ReadonlyArray<number>;
+    readonly currentCp: number;
+}
+interface DispatchProps {
+    onSelectCp: (e: Event) => void;
+}
+type Props = StateProps & DispatchProps;
+
+const mapStateToProps = (state: State): StateProps => {
+    const cpsOfAgence = state.codesPostaux
+        .map((cp: CodePostal) => cp.id);
+    return {cps: cpsOfAgence, currentCp: state.codePostal.id};
+};
+
+const mapDispatchToProps = (dispatch: Function): DispatchProps => {
+    return {
+        onSelectCp: (e: Event) => {
+            let codePostalId =
+                new CodePostalId(parseInt((e.target as any).value));
+            dispatch(setCodePostalId(codePostalId));
+        }
+    };
+};
+export const SelectCodePostal =
+    connect(mapStateToProps, mapDispatchToProps)(SelectCodePostal_);
+```
+---
+
+# Passer le store
+
+Tous les conteneurs de l'application doivent avoir accès au store.
+```typescript
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
+import {reducer, State} from './reducers/index';
+import {App} from './components/app';
+
+const store = createStore(reducer);
+
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    document.getElementById('app')
+);
+```
+---
+layout: false
+
+#TP-04
+## Liste de courses - bis
+1. Installer les packages redux et react-redux, ainsi que leurs '@types'
+2. Reprendre le TP-02 mais en utilisant le *state* du store plutot que le *state* du composant,
+et en initialisant la liste sans chargement asynchrone (liste en dur).
+ * Créer l'interface **State** du *state* du *store* (la liste d'items)
+ * Creer une interface **ItemsAction**
+ * Créer un *action creator* **setItems** qui renvoie une **ItemAction**
+ * Créer un reducer **items** qui prend une **ItemAction** en entrée
+ * Créer un reducer global à l'aide de **combineReducer**
+ * Créer le *contener* et le *presentational component*
+ * Passer un titre dans les ownProps (et donc créer l'interface **OwnProps**)
+3. Bonus: Créer un bouton qui permet d'ajouter des items au store.
+
+---
+
+template: default
+layout: true
+
+### Actions asynchrones
+---
+
+## Généralités
+
+* Redux ne permet que de dispatcher des objets
+* **redux-thunk** permet de passer une fonction, et donc des actions asynchrones ou des actions avec conditions.
+C'est un **middleware**.
+* Avec **TypeScript** on se fait quelques noeuds au cerveau ;)
+* C'est plus élégant que les actions retournent des **promesses**
+
+---
+
+## Middleware
+```typescript
+import {reducer} from './reducers/index';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(
+    reducer,
+    applyMiddleware(thunk)
+);
+
+```
+
+---
+
+## Promesses
+
+```typescript
+const getItemsId: (() => Promise<number[]>) =
+    () => axios.get<Item[]>('src/items.json')
+        .then(resp => resp.data)
+        .then((items: Item[]) => items.map(item => item.id))
+        .catch((error: any) => console.log(error.toString()))
+```
+
+---
+
+## Sans TypeScript
+```javascript
+const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+
+function incrementCreator(inc) {
+  return {
+    type: INCREMENT_COUNTER,
+    inc: inc
+  };
+}
+
+function incrementAsyncCreator(inc) {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(incrementCreator(inc));
+    }, 1000);
+  };
+}
+
+
+```
+
+---
+
+## Avec TypeScript
+
+Une **ThunkAction** est une fonction qui reçoit en entrée les méthodes *dispatch()* et *getState()*, et retourne le
+résultat de **dispatch()**
+```typescript
+export type ThunkAction<R, S, E> =
+        (dispatch: Dispatch<S>, getState: () => S, extraArgument: E) => R;
+
+	export interface Dispatch<S> {
+		<R, E>(asyncAction: ThunkAction<R, S, E>): R;
+	}
+
+```
+Dans le code, on va écrire des **ThunkActionCreator**
+```typescript
+type ThunkAction2<R> = ThunkAction<R, State, void>;
+export type ThunkActionCreator<R> = (...args: any[]) => ThunkAction2<R>;
+// Ou en une ligne
+export type ThunkActionCreator<R> = (...args: any[]) => ThunkAction<R, State, void>;
+```
+
+```typescript
+export const fetchItems: ThunkActionCreator<void> = () =>
+    (dispatch, getState) => getItems(getState().userId)
+        .then(items => {
+            dispatch(setItems(items));
+        })
+        .catch((error: any) => {
+            console.log(error);
+        });
+```
+
+---
+layout: false
+
+#TP-05
+## Liste de courses - ter
+1. Installer redux-thunk et le '@types'
+2. Reprendre le TP-04 mais faisant un appel asynchrone (http) pour charger la liste d'items
+3. Bonus: Faire une action qui avant d'ajouter l'item au store, applique la TVA sur le prix lors d'un ajout d'item par le formulaire
+
+---
+
+# Bravo !
+* C'était la partie la plus compliquée
+* On sait créer des compostants et leur passer des propriétés
+ * Depuis leur composant parent
+ * Depuis depuis un l'état 'local' (**LocalState**)
+ * Depuis l'état du **store** (**State**)
+ * Depuis un composant (grand)n-parent par le context... ou pas !
+
+---
+
+
+template: default
+layout: true
+
+### Context
+---
+
+## Mises en garde
+
+* On peut passer des objets à ses composants enfants (n'importe où dans la hiérarchie).
+* Des librairies sont basées la dessus, mais ce n'est pas officiellement supporté (le fonctionnement pourra varier, être supprimé).
+La doc par d'**experimental API** !
+* *react-redux* fonctionne grâce à ca (le store est passé à tous les enfants).
+* ** A n'utiliser qu'en cas d'urgence ;)**
+
+---
+
+## PropTypes
+
+* Nécessaires pour faire fonctionner le *context*
+* Permet de décrire (typer, rendre obligatoire, ...) des propriétés
+* Pas vraiment utile quand on fait du typescript !
+
+---
+
+## Utilisation
+Dans le composant parent, il faut implémenter *getChildContext()*
+```typescript
+getChildContext(): MyContext  {
+    return {color: 'purple', user: new User(0, 'admin')};
+}
+```
+Puis définir les *childContextTypes*, toujours dans le composant parent
+```typescript
+static childContextTypes = {
+    color: React.PropTypes.string.isRequired,
+    user: React.PropTypes.object.isRequired
+};
+```
+
+---
+
+## Utilisation
+Dans le composant enfant, on peut typer le *context*, il faut déclarer les *contextTypes*, et là on
+a accès au context dans le composant.
+```typescript
+class Child extends React.Component<void, void> {
+
+    context: MyContext;
+
+    static contextTypes = {
+        color: React.PropTypes.string.isRequired,
+        user: React.PropTypes.object.isRequired
+    };
+
+    render() {
+        return <div>user = {this.context.user.login}</div>;
+    }
+}
+```
+
+---
+layout: false
+
+#TP-06
+## Contexte
+Le but est de passer une couleur et un **User** d'un composant à son composant 'petit-fils'
+1. Déclarer un context dans le composant grand parent (Large), avec une couleur et un User.
+2. Afficher les informations passées dans le *context* dans le composant petit-fils (Small)
+
+---
+
+template: default
+layout: true
+
+### Tests
+
+---
+
+## Jest & Enzyme
+
+L'idée est de tester les composants de *présentation*, avec leurs états et leurs propriétés.
+
+[Jest API](https://facebook.github.io/jest/docs/api.html#content)
+
+[Enzyme API](https://github.com/airbnb/enzyme/blob/master/docs/api/shallow.md)
+
+```typescript
+import React from 'react';
+import {shallow} from 'enzyme';
+
+describe(MyComponent, () => {
+    it('should work !', () => {
+        const component = shallow(<MyComponent/>);
+    });
+});
+```
+---
+
+## Quelques exemples
+
+Vérifier que le composant s'affiche avec ses sous composants
+```typescript
+describe(MyComponent, () => {
+    it('renders MyComponent and its sub components', () => {
+        const component = shallow(
+            <MyComponent/>
+        );
+        expect(component.find(SubComponent1).exists()).toBeTruthy();
+        expect(component.find(SubComponent2).exists()).toBeTruthy();
+    });
+});
+```
+Vérifier le texte du composant
+```typescript
+expect(component.text()).toContain('mon texte attendu');
+```
+
+Vérifier qu'une méthode a été appelée
+```typescript
+const mockOnChange = jest.fn();
+expect(mockOnChange).toBeCalledWith(myParam);
+```
+---
+
+## Quelques exemples
+
+Simuler un événement
+```typescript
+component.find('button').at(1).simulate('click');
+component.find('input').simulate('change', {target: {value: 'ma valeur'}});
+```
+Appeler une méthode
+```typescript
+component.instance().maMethode();
+```
+Récupérer l'état
+```typescript
+expect(component.state('name')).toEqual('mon nom');
+```
+
+---
+layout: false
+
+#TP-07
+## Les tests
+Le but est de tester complètement le TP-03
+1. Installer jest, enzyme, react-addons-test-utils (--save-dev) et leurs définitions de type
+2. Créer un fichier .test.ts par composant
+3. *StudentDetails*: Vérifier le texte pour les 2 cas (Student.NULL ou non)
+4. *Filter*: Vérifier que le callback est appelé lors d'un événement *change*
+5. *StudenstTable*: Vérifier le nombre de ligne du tableau suivant le nombre de *Student* passés. Vérifier également le callback.
+6. *StudentsApp*: Vérifier que le composant et ses sous composants sont affichés, puis vérifier l'impact des méthodes *handleSelectStudent()* et
+*handleFilterChange()* sur le *state*. Enfin valider que *filteredStudents()* renvoie les bons éléments pour un filtre donné.
+
+
+</textarea>
+<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+</script>
+<script>
+    var slideshow = remark.create({highlightLanguage: 'typescript'});
+</script>
+</body>
+</html>
