@@ -129,7 +129,7 @@
 
 class: center, middle, inverse
 
-# React
+# BBL React
 ### avec TypeScript 2 et ES6
 
 #### [@jbcazaux](http://twitter.com/jbcazaux)
@@ -140,7 +140,7 @@ class: center, middle, inverse
 
 ```json
 [...]
-"typescript": "2.1.6",
+"typescript": "2.2.1",
 "react": "15.4.2",
 "webpack": "2.2.1",
 [...]
@@ -177,67 +177,67 @@ layout: true
 # ~~var~~, let, const
 
 ```javascript
-    let foo = 'bar';
-    const MAX = 10;
-    const ttc = addTva(15);
+let foo = 'bar';
+const MAX = 10;
+const ttc = addTva(15);
 ```
 ---
 
 # ~~var~~, let, const
 
 ```javascript
-    const user = {};
-    user.name = 'john'; // ok ?
-    user = {name: 'lea'}; // ok ?
+const user = {};
+user.name = 'john'; // ok ?
+user = {name: 'lea'}; // ok ?
 
-    const arr = ['a'];
-    arr.push('b'); // ok ?
-    arr = ['a', 'b']; // ok ?
+const arr = ['a'];
+arr.push('b'); // ok ?
+arr = ['a', 'b']; // ok ?
 ```
 ---
 
 # Arrow functions
 
 ```javascript
-    function addOldSchool(a, b) {
-        return a + b;
-    }
+function addOldSchool(a, b) {
+    return a + b;
+}
 ```
 ---
 
 # Arrow functions
 
 ```javascript
-    function addOldSchool(a, b) {
-        return a + b;
-    }
+function addOldSchool(a, b) {
+    return a + b;
+}
 
-    let add = (a, b) => {
-        return a + b;
-    }
+let add = (a, b) => {
+    return a + b;
+}
 ```
 ---
 
 # Arrow functions
 
 ```javascript
-    function addOldSchool(a, b) {
-        return a + b;
-    }
+function addOldSchool(a, b) {
+    return a + b;
+}
 
-    let add = (a, b) => {
-        return a + b;
-    }
+let add = (a, b) => {
+    return a + b;
+}
 
-    add = (a, b) => a + b
+add = (a, b) => a + b
 ```
 ---
 
 # Arrow functions
 
 ```javascript
-    const squares = [0, 1, 2, 3, 4].map(x => x * x);
-    console.log(squares);
+const squares = [0, 1, 2, 3, 4].map(x => x * x);
+console.log(squares);
 ```
 ---
 
@@ -251,110 +251,110 @@ Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http:
 # Spread operator
 
 ```javascript
-    const odd = [1, 3, 5, 7, 9];
-    const even = [2, 4, 6, 8]
-    const all = [0];
+const odd = [1, 3, 5, 7, 9];
+const even = [2, 4, 6, 8]
+const all = [0];
 
-    all.push(odd);
-    all.push(even);
+all.push(odd);
+all.push(even);
 
-    console.log(all) // ?
+console.log(all) // ?
 ```
 ---
 
 # Spread operator
 
 ```javascript
-    const odd = [1, 3, 5, 7, 9];
-    const even = [2, 4, 6, 8]
-    const all = [0];
+const odd = [1, 3, 5, 7, 9];
+const even = [2, 4, 6, 8]
+const all = [0];
 
-    all.push(...odd);
-    all.push(...even);
+all.push(...odd);
+all.push(...even);
 
-    console.log(all) // ?
+console.log(all) // ?
 ```
 ---
 # Destructuring
 
 ```javascript
-    const foo = {a: 1, b: 2, c: 'bar'};
-    let {a} = foo;
-    console.log(a); // ?
+const foo = {a: 1, b: 2, c: 'bar'};
+let {a} = foo;
+console.log(a); // ?
 ```
 ---
 # Destructuring
 
 ```javascript
-    const user = {};
-    user.firstname = 'john';
-    user.lastname = 'doe';
+const user = {};
+user.firstname = 'john';
+user.lastname = 'doe';
 
-    function displayUser(user) {
-        return user.firstname.concat(' ').concat(user.lastname);
-    }
+function displayUser(user) {
+    return user.firstname.concat(' ').concat(user.lastname);
+}
 ```
 ---
 # Destructuring
 
 ```javascript
-    const user = {};
-    user.firstname = 'john';
-    user.lastname = 'doe';
+const user = {};
+user.firstname = 'john';
+user.lastname = 'doe';
 
-    function displayUser(user) {
-        return user.firstname.concat(' ').concat(user.lastname);
-    }
+function displayUser(user) {
+    return user.firstname.concat(' ').concat(user.lastname);
+}
 
-    function displayUser({firstname, lastname}) {
-        return firstname.concat(' ').concat(lastname);
-    }
+function displayUser({firstname, lastname}) {
+    return firstname.concat(' ').concat(lastname);
+}
 ```
 ---
 # Destructuring
 
 ```javascript
-    const user = {};
-    user.firstname = 'john';
-    user.lastname = 'doe';
+const user = {};
+user.firstname = 'john';
+user.lastname = 'doe';
 
-    function displayUser(user) {
-        return user.firstname.concat(' ').concat(user.lastname);
-    }
+function displayUser(user) {
+    return user.firstname.concat(' ').concat(user.lastname);
+}
 
-    function displayUser({firstname, lastname}) {
-        return firstname.concat(' ').concat(lastname);
-    }
+function displayUser({firstname, lastname}) {
+    return firstname.concat(' ').concat(lastname);
+}
 
-    const displayUser = ({firstname, lastname}) =>
-        firstname.concat(' ').concat(lastname);
+const displayUser = ({firstname, lastname}) =>
+    firstname.concat(' ').concat(lastname);
 ```
 ---
 # Shorthand Notation
 ```javascript
-    const foo = 1;
-    const bar = 2;
+const foo = 1;
+const bar = 2;
 
-    const longer = {
-        foo: foo,
-        bar: bar
-    }
+const longer = {
+    foo: foo,
+    bar: bar
+}
 ```
 ---
 # Shorthand Notation
 ```javascript
-    const foo = 1;
-    const bar = 2;
+const foo = 1;
+const bar = 2;
 
-    const longer = {
-        foo: foo,
-        bar: bar
-    }
+const longer = {
+    foo: foo,
+    bar: bar
+}
 
-    const shorter = {
-        foo,
-        bar
-    }
+const shorter = {
+    foo,
+    bar
+}
 ```
 
 ---
@@ -363,47 +363,47 @@ Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http:
 
 * Object.assign
 ```javascript
-    Object.assign({}, {a: 1, c: 3}, {a: 10, b: 2}); // = ?
+Object.assign({}, {a: 1, c: 3}, {a: 10, b: 2}); // = ?
 ```
 
 * Map
 ```javascript
-    const m = new Map();
-    m.set('foo', 2);
-    const bar = m.has('foo') ? m.get('foo') : 0;
+const m = new Map();
+m.set('foo', 2);
+const bar = m.has('foo') ? m.get('foo') : 0;
 ```
 
 * Set
 ```javascript
-    const uniq = new Set([1, 2, 3, 1, 2, 3]);
-    uniq.length // ?
+const uniq = new Set([1, 2, 3, 1, 2, 3]);
+uniq.length // ?
 ```
 ---
 # Rappels
 
 * currying
 ```javascript
-    let add = function(x) {
-        return function(y) {
-            return x + y
-        }
+let add = function(x) {
+    return function(y) {
+        return x + y
     }
-    add(2)(3) // ???
+}
+add(2)(3) // ???
 ```
 ---
 # Rappels
 
 * currying
 ```javascript
-    let add = function(x) {
-        return function(y) {
-            return x + y
-        }
+let add = function(x) {
+    return function(y) {
+        return x + y
     }
-    add(2)(3) // 5 !
+}
+add(2)(3) // 5 !
 
-    const add2 = add(2);
-    add2(3); // = ?
+const add2 = add(2);
+add2(3); // = ?
 ```
 
 ---
@@ -411,28 +411,28 @@ Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http:
 
 * currying
 ```javascript
-    let add = function(x) {
-        return function(y) {
-            return x + y
-        }
+let add = function(x) {
+    return function(y) {
+        return x + y
     }
-    let add = x => y => x + y // WTF ?!
+}
+let add = x => y => x + y // WTF ?!
 ```
 ---
 # Rappels
 
 * currying
 ```javascript
-    let add = function(x) {
-        return function(y) {
-            return x + y
-        }
+let add = function(x) {
+    return function(y) {
+        return x + y
     }
-    let add = x => y => x + y // WTF ?!
+}
+let add = x => y => x + y // WTF ?!
 
-    let add = x =>
-        y => (x + y);
-    // easy !
+let add = x =>
+    y => (x + y);
+// easy !
 ```
 
 ---
@@ -440,9 +440,9 @@ Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http:
 
 * this
 ```javascript
-    function f() {
-        this.foo; // what is this ?
-    }
+function f() {
+    this.foo; // what is this ?
+}
 ```
 ---
 
@@ -460,28 +460,28 @@ layout: true
 # Types de base
 
 ```typescript
-    let isDone: boolean = false;
+let isDone: boolean = false;
 ```
 ```typescript
-    let company: string = 'chronopost';
+let company: string = 'chronopost';
 ```
 ```typescript
-    let result: number = 2 * 3 * 7;
+let result: number = 2 * 3 * 7;
 ```
 ```typescript
-    let even: number[] = [0, 2, 4, 6, 8];
-    let odd: Array<number> = [1, 3, 5, 7, 9];
+let even: number[] = [0, 2, 4, 6, 8];
+let odd: Array<number> = [1, 3, 5, 7, 9];
 ```
 ```typescript
-    let latLng: [number, number] = [48.8171115, 2.353771199999983];
+let latLng: [number, number] = [48.8171115, 2.353771199999983];
 ```
 ```typescript
-    let machin: any = 'truc';
-    machin = 12;
+let machin: any = 'truc';
+machin = 12;
 ```
 ```typescript
-    let greetings: string | null = null;
-    greetings = 'hello !';
+let greetings: string | null = null;
+greetings = 'hello !';
 ```
 
 Et aussi: object, void, never, undefined, symbol...
@@ -490,99 +490,99 @@ La doc: [https://www.typescriptlang.org/docs/handbook/basic-types.html](https://
 ---
 # Interface
 ```typescript
-    interface Operation {
-        calc: (a: number, b: number) => number;
-        precision?: number;
-    }
+interface Operation {
+    calc: (a: number, b: number) => number;
+    precision?: number;
+}
 ```
 ---
 # Interface
 ```typescript
-    interface Operation {
-        calc: (a: number, b: number) => number;
-        precision?: number;
-    }
-    let plus: Operation = {
-        calc: (a, b) => a + b;
-    }
+interface Operation {
+    calc: (a: number, b: number) => number;
+    precision?: number;
+}
+let plus: Operation = {
+    calc: (a, b) => a + b;
+}
 ```
 ---
 # Interface
 ```typescript
-    interface Operation {
-        calc: (a: number, b: number) => number;
-        precision?: number;
-    }
-    let plus: Operation = {
-        calc: (a, b) => a + b;
-    }
-    plus = {
-        calc: (a: string, b) => a + b; // Bim !
-    }
+interface Operation {
+    calc: (a: number, b: number) => number;
+    precision?: number;
+}
+let plus: Operation = {
+    calc: (a, b) => a + b;
+}
+plus = {
+    calc: (a: string, b) => a + b; // Bim !
+}
 ```
 ---
 # Interface
 ```typescript
-    interface Operation {
-        calc: (a: number, b: number) => number;
-        precision?: number;
-    }
-    interface Operation<T> {
-        calc: (a: T, b: T) => T;
-        precision?: T;
-    }
-    let plus: Operation<number> = {
-        calc: (a, b) => a + b;
-    }
+interface Operation {
+    calc: (a: number, b: number) => number;
+    precision?: number;
+}
+interface Operation<T> {
+    calc: (a: T, b: T) => T;
+    precision?: T;
+}
+let plus: Operation<number> = {
+    calc: (a, b) => a + b;
+}
 ```
 ---
 # Classe
 ```typescript
-    class User {
-        constructor(public id: number, public login: string) {}
-    }
-    let user1 = new User(1, 'toto');
+class User {
+    constructor(public id: number, public login: string) {}
+}
+let user1 = new User(1, 'toto');
 ```
 ```typescript
-    class Minus implements Operation<number> {
-        calc = (a: number, b: number) => a - b;
-    }
+class Minus implements Operation<number> {
+    calc = (a: number, b: number) => a - b;
+}
 ```
 ---
 # Type
 ```typescript
-    interface Printable {
-        print: () => void;
-    }
+interface Printable {
+    print: () => void;
+}
 
-    interface Drawable {
-        draw: () => void;
-    }
+interface Drawable {
+    draw: () => void;
+}
 
-    interface Page extends Printable, Drawable {};
-    type Page = Printable & Drawable;
+interface Page extends Printable, Drawable {};
+type Page = Printable & Drawable;
 ```
 ---
 # Readonly
 ```typescript
-    interface Props {
-        readonly user: User
-    }
+interface Props {
+    readonly user: User
+}
 ```
 ```typescript
-    class User {
-        readonly id: string;
-        readonly login: string;
-        constructor(id: string, login: string) {
-            this.id = id;
-            this.login = login;
-        }
+class User {
+    readonly id: string;
+    readonly login: string;
+    constructor(id: string, login: string) {
+        this.id = id;
+        this.login = login;
+    }
 
-         static NULL = new User('NULL', 'NULL');
-    }
+     static NULL = new User('NULL', 'NULL');
+}
 ```
 ```typescript
-    let apps: ReadonlyArray<string> = ['app1', 'app2'];
+let apps: ReadonlyArray<string> = ['app1', 'app2'];
 ```
 
 ---
@@ -622,7 +622,7 @@ index.tsx
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { Hello } from './hello';
+import Hello from './hello';
 
 ReactDOM.render(
     <Hello name="world"/>, // Hello !
@@ -633,9 +633,10 @@ hello.tsx
 ```typescript
 import * as React from 'react';
 
-interface Props { name: string;}
-
-export class Hello extends React.Component<Props, void> {
+interface Props {
+    name: string;
+}
+export default class Hello extends React.Component<Props, void> {
     render() {
         return <h1>Hello {this.props.name}!</h1>;
     }
@@ -699,7 +700,31 @@ shouldComponentUpdate & Virtual-DOM
 ![update](./should-component-update.png)
 ---
 
-# State
+# Local State
+
+On peut stocker dans le composant:
+- l'état d'un champ input (texte, checkbox, ...)
+- les data récupérées d'un webservice
+- ...
+
+En plus des **props**, le composant a donc un **state**.
+---
+
+# Props vs State
+* Props
+    * Les données passées par les parents
+* State
+    * A faire
+        * Les données modifiables par les événements de la UI
+        * Le plus possible de composants sans état
+    * A ne pas faire
+        * Des données calculées (à faire dans render)
+        * Des données dérivées des *props*
+        * Des composants
+
+---
+
+# Local State
 
 * Définir l'état par défaut (dans le constructeur)
 ```typescript
@@ -714,21 +739,8 @@ this.setState((prevState: State) => {...})
 ```typescript
 this.state
 ```
-
 ---
-# Props vs State
-* Props
-    * Les données passées par les parents
-* State
-    * A faire
-        * Les données modifiables par les événements de la UI
-        * Le plus possible de composants sans état
-    * A ne pas faire
-        * Des données calculées (à faire dans render)
-        * Des données dérivées des *props*
-        * Des composants
 
----
 #Stateless component
 ```typescript
 import * as React from "react";
