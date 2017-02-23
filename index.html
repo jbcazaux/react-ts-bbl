@@ -199,12 +199,46 @@ layout: true
 # Arrow functions
 
 ```javascript
+    function addOldSchool(a, b) {
+        return a + b;
+    }
+```
+---
+
+# Arrow functions
+
+```javascript
+    function addOldSchool(a, b) {
+        return a + b;
+    }
+
     let add = (a, b) => {
         return a + b;
     }
-    let add = (a, b) => a + b
 ```
+---
 
+# Arrow functions
+
+```javascript
+    function addOldSchool(a, b) {
+        return a + b;
+    }
+
+    let add = (a, b) => {
+        return a + b;
+    }
+
+    add = (a, b) => a + b
+```
+---
+
+# Arrow functions
+
+```javascript
+    const squares = [0, 1, 2, 3, 4].map(x => x * x);
+    console.log(squares);
+```
 ---
 
 # Attention !
@@ -329,7 +363,7 @@ Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http:
 
 * Object.assign
 ```javascript
-    Object.assign({}, {a: 1, c: 3}, {a: 10, b: 2}) // = ?
+    Object.assign({}, {a: 1, c: 3}, {a: 10, b: 2}); // = ?
 ```
 
 * Map
@@ -423,41 +457,113 @@ layout: true
 ### TypeScript 2
 
 ---
+# Types de base
 
-* Types de base: [https://www.typescriptlang.org/docs/handbook/basic-types.html](https://www.typescriptlang.org/docs/handbook/basic-types.html)
-* Interface
 ```typescript
-    interface Props = {
-        lat: number;
-        lng: number;
+    let isDone: boolean = false;
+```
+```typescript
+    let company: string = 'chronopost';
+```
+```typescript
+    let result: number = 2 * 3 * 7;
+```
+```typescript
+    let even: number[] = [0, 2, 4, 6, 8];
+    let odd: Array<number> = [1, 3, 5, 7, 9];
+```
+```typescript
+    let latLng: [number, number] = [48.8171115, 2.353771199999983];
+```
+```typescript
+    let machin: any = 'truc';
+    machin = 12;
+```
+```typescript
+    let greetings: string | null = null;
+    greetings = 'hello !';
+```
+
+Et aussi: object, void, never, undefined, symbol...
+
+La doc: [https://www.typescriptlang.org/docs/handbook/basic-types.html](https://www.typescriptlang.org/docs/handbook/basic-types.html)
+---
+# Interface
+```typescript
+    interface Operation {
+        calc: (a: number, b: number) => number;
+        precision?: number;
     }
 ```
-* Classe
+---
+# Interface
+```typescript
+    interface Operation {
+        calc: (a: number, b: number) => number;
+        precision?: number;
+    }
+    let plus: Operation = {
+        calc: (a, b) => a + b;
+    }
+```
+---
+# Interface
+```typescript
+    interface Operation {
+        calc: (a: number, b: number) => number;
+        precision?: number;
+    }
+    let plus: Operation = {
+        calc: (a, b) => a + b;
+    }
+    plus = {
+        calc: (a: string, b) => a + b; // Bim !
+    }
+```
+---
+# Interface
+```typescript
+    interface Operation {
+        calc: (a: number, b: number) => number;
+        precision?: number;
+    }
+    interface Operation<T> {
+        calc: (a: T, b: T) => T;
+        precision?: T;
+    }
+    let plus: Operation<number> = {
+        calc: (a, b) => a + b;
+    }
+```
+---
+# Classe
 ```typescript
     class User {
         constructor(public id: number, public login: string) {}
     }
     let user1 = new User(1, 'toto');
 ```
----
-
-* Type
 ```typescript
-    interface Props extends DispatchProps, StateProps {}
-    type Props = DispatchProps & StateProps;
-```
-* Génériques
-```typescript
-    function toArray<T>(arg1: T, arg2: T): T[] {
-        return [arg1, arg2];
+    class Minus implements Operation<number> {
+        calc = (a: number, b: number) => a - b;
     }
-    toArray(5, 6);
-    toArray(5, 'hello'); // Bim !
 ```
-
 ---
+# Type
+```typescript
+    interface Printable {
+        print: () => void;
+    }
 
-* Readonly
+    interface Drawable {
+        draw: () => void;
+    }
+
+    interface Page extends Printable, Drawable {};
+    type Page = Printable & Drawable;
+```
+---
+# Readonly
 ```typescript
     interface Props {
         readonly user: User
@@ -471,6 +577,8 @@ layout: true
             this.id = id;
             this.login = login;
         }
+
+         static NULL = new User('NULL', 'NULL');
     }
 ```
 ```typescript
@@ -478,8 +586,9 @@ layout: true
 ```
 
 ---
+# Définitions de types
 
-* @types -  Descriptions des librairies non TypeScript
+@types -  Descriptions des librairies non TypeScript
 ```
 $> npm install --save-dev @types/react
 ```
@@ -494,8 +603,6 @@ react                             dt     http://facebook.github.io/react/       
 react-bootstrap                   dt     https://github.com/react-bootstrap/react-bootstrap                        1        2016-08-06T07:24:14.000Z
 $> typings install --save --global dt~react
 ```
-
-
 ---
 layout: false
 class: center, middle, inverse
@@ -518,7 +625,7 @@ import * as ReactDOM from 'react-dom';
 import { Hello } from './hello';
 
 ReactDOM.render(
-    <Hello name="world"/>,
+    <Hello name="world"/>, // Hello !
     document.getElementById("app")
 );
 ```
@@ -558,38 +665,6 @@ render: function() {
 }
 ```
 ---
-
-#Create or extends ?
-```typescript
-export const Hello = React.createClass<Props, void>({
-    render: function() {
-        return (
-            <h1>Hello {this.props.name}!</h1>
-        );
-    }
-});
-```
-```typescript
-export class Hello extends React.Component<Props, void>{
-    render() {
-        return (
-            <h1>Hello {this.props.name}!</h1>
-        );
-    }
-}
-```
-
----
-layout: false
-
-#TP-01
-## Hello World !
-
-1. Etendre la classe React.Component
-2. Implémenter la méthode render()
-
----
-
 template: default
 layout: true
 
@@ -599,24 +674,34 @@ layout: true
 
 #Composant et Cycle de vie
 * seule **render()** est obligatoire
-* **getInitialState()**: invoqué une seule fois à la création du composant
-* **getDefaultProps()**: invoqué une seule fois aussi
-* **propTypes**, **mixins**, **statics**: plus tard... ;)
 * **componentWillMount()**: J'arrive !
 * **componentDidMount()**: Je suis là !
-* **componentWillReceiveProps(**nextProps: Object**)**
-* **shouldComponentUpdate(**nextProps: Object, nextState: Object**)**: Qu'est ce qu'on fait, chef ?
-* **componentWillUpdate(**nextProps: Object, nextState: object**)**: A l'attaque !
-* **componentDidUpdate(**nextProps: Object, nextState: object**)**: job done
+* **componentWillReceiveProps(**nextProps: object**)**
+* **shouldComponentUpdate(**nextProps: object, nextState: object**)**: Qu'est ce qu'on fait, chef ?
+* **componentWillUpdate(**nextProps: object, nextState: object**)**: A l'attaque !
+* **componentDidUpdate(**nextProps: object, nextState: object**)**: job done
 * **componentWillUnmount()**: bye bye !
-
 ---
+template: default
+layout: true
+
+### Principes généraux
+---
+
+# Tout est composant
+
+![components](./components.png)
+---
+
+# On ne redessine que le nécessaire
+shouldComponentUpdate & Virtual-DOM
+
+![update](./should-component-update.png)
+---
+
 # State
 
-* Définir l'état par défaut
-```typescript
-getInitialState() { return {...} }
-```
+* Définir l'état par défaut (dans le constructeur)
 ```typescript
 this.state = {...}
 ```
