@@ -642,6 +642,7 @@ export default class Hello extends React.Component<Props, void> {
     }
 }
 ```
+[Run the code](http://codepen.io/jbcazaux/pen/ZeEgLR)
 ---
 
 #JSX
@@ -703,41 +704,66 @@ shouldComponentUpdate & Virtual-DOM
 # Local State
 
 On peut stocker dans le composant:
-- l'état d'un champ input (texte, checkbox, ...)
-- les data récupérées d'un webservice
+- l'état d'un formulaire (champs texte, checkbox, ...)
+- les data récupérées d'un webservice et qui vont être affichées
+- l'état du composant (normal, réduit, ...)
 - ...
 
 En plus des **props**, le composant a donc un **state**.
 ---
 
 # Props vs State
-* Props
-    * Les données passées par les parents
-* State
-    * A faire
-        * Les données modifiables par les événements de la UI
-        * Le plus possible de composants sans état
-    * A ne pas faire
-        * Des données calculées (à faire dans render)
-        * Des données dérivées des *props*
-        * Des composants
 
+**Props**: Les données sont passées par les parents
+
+**State**: Les données sont définies par le composant lui-même
+
+
+* Bonne pratiques:
+    * les données modifiables par les événements de la UI => **State**
+    * les données non partagées avec d'autres composants => **State**
+    * Le plus possible de composants sans état (plus simple, plus testable)
+* Mauvaises pratiques
+    * Des données calculées (à faire dans *render()*)
+    * Des données dérivées des *props*
+    * Des composants
 ---
 
 # Local State
 
-* Définir l'état par défaut (dans le constructeur)
-```typescript
-this.state = {...}
+```jsx
+interface Props {}
+interface LocalState {
+    date: Date;
+}
+class Clock extends React.Component<Props, LocalState> {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
 ```
-* Définir un nouvel état
+[Run the code](http://codepen.io/jbcazaux/pen/VpwoWY)
+---
+
+#Stateless component
 ```typescript
-this.setState({...})
-this.setState((prevState: State) => {...})
-```
-* Récupérer l'état courant
-```typescript
-this.state
+import * as React from 'react';
+
+interface Props {
+    readonly name: string;
+}
+
+export const Hello = (props: Props) => <h1>Hello {props.name}!</h1>;
 ```
 ---
 
@@ -745,11 +771,16 @@ this.state
 ```typescript
 import * as React from "react";
 
-interface Props { readonly name: string;}
+interface Props {
+    readonly name: string;
+}
 
 export const Hello = (props: Props) => <h1>Hello {props.name}!</h1>;
 ```
-
+```typescript
+export const Hello = ({name}: Props) => <h1>Hello {name}!</h1>;
+```
+[Run the code](http://codepen.io/jbcazaux/pen/aJbeEr)
 ---
 
 template: default
@@ -763,92 +794,111 @@ layout: true
 ```typescript
 render() {
     return (
-        ...
+        <ul>
         {
-            items.map(item => <div key={item.id}>{item.label}</div>)
+            ['hearts', 'clubs', 'spades', 'diamonds'].map(color =>
+                <li key={color}>{color}</li>)
         }
-        ...
+        </ul>
+    )
+}
+```
+[Run the code](http://codepen.io/jbcazaux/pen/YZzmvq)
+---
+
+# Caractères spéciaux
+```typescript
+render() {
+    return (
+        <span> Jet d{String.fromCharCode(39)}eau</span>
     )
 }
 ```
 ---
-layout: false
 
-#TP-02
-## Liste de courses
-1. Installer les définitions de type d'axios
-2. Faire compiler le code (interfaces Props et State)
-3. Mettre un état par défaut
-4. Afficher un message de log pour chaque moment du cycle de vie
-5. Créer un composant distinct pour les éléments (li) de la liste
-6. Bonus: Utiliser une classe qui encapsule le composant "liste" pour gérer l'appel au serveur, et transmettre les data
-en tant que *props*
----
-#Bonus TP-02
-```typescript
-export class ShoppingList extends React.Component<Props, State> {
-    // constructor...
-    // componentDidMount() {...}
-    render() {
-        return (
-            <ShoppingListInternal
-                    title={this.props.title}
-                    items={this.state.items}/>
-        )
-    }
-}
-
-type PropsInt = Props & State;
-const ShoppingListInternal = ({title, items}: PropsInt) => (
-    <div>
-        <h2>{title}</h2>
-        <ul>
-            {
-                items.map(item => <ShoppingItem key={item.id} item={item}/>)
-            }
-        </ul>
-    </div>
-)
+# JSX if (else)
+if
+```jsx
+{this.state.user && <div>{this.state.user.login}</div>}
+```
+not
+```jsx
+{this.state.user || <div>No User</div>}
+```
+if-else
+```jsx
+{this.state.user ? <div>{this.state.user.login}</div> : <div>No User</div>}
 ```
 ---
 
 template: default
 layout: true
 
-### Callbacks
+### Events
 
 ---
-# Passer des fonctions dans Props
+# onClick
 ```typescript
-export class ShoppingList extends React.Component<Props, State> {
-    // constructor...
-    // componentDidMount() {...}
-    deleteItem() {
-        let newItems = this.state.items.slice(1);
-        this.setState({items: newItems});
+interface State {
+    count: number;
+}
+class ClickCounter extends React.Component<void, State> {
+  constructor(props) {
+    super(props);
+    this.state = {count: 0};
+  }
+
+  handleClick() {
+    this.setState(prevState => ({count: ++prevState.count}));
+  }
+
+  render() {
+    return (
+      <div>
+        Click : {this.state.count}
+        <button onClick={this.handleClick.bind(this)}>Click</button>
+      </div>
+    );
+  }
+}
+```
+[Run the code](http://codepen.io/jbcazaux/pen/oZNrdQ/)
+---
+# Passer des callbacks
+
+* Découper l'UI en composants réutilisables
+* Ecrire des composants sans état
+* Les informations passent dans un seul sens (parent -> enfants)
+
+![callbacks](./callbacks.png)
+---
+
+# Passer des callbacks
+```typescript
+interface State {count: number;}
+class ClickCounter extends React.Component<void, State> {
+    constructor() {
+        super();
+        this.state = {count: 0};
     }
+
+    handleClick() {
+        this.setState(prevState => ({count: ++prevState.count}));
+    }
+
     render() {
-        return (<ShoppingListInternal
-                    title={this.props.title}
-                    items={this.state.items}
-                    del={this.deleteItem.bind(this)}/>)
+        return <div>
+                Click : {this.state.count}
+                <RedButton whenClicked={() => this.handleClick()}/>
+            </div>;
     }
 }
-interface PropsInt {readonly title: string;
-    readonly items: ReadonlyArray<Item>;readonly del: () => void}
-const ShoppingListInternal = ({title, items, del}: PropsInt) => (
-    <div>
-        <h2>{title}</h2>
-        <ul>
-            {items.map(item => {
-                return (<li onClick={del}>
-                        <span>{item.label}</span>:<span>{item.price}€</span>
-                        </li>
-                )})}
-        </ul>
-    </div>
-);
+
+interface RedButtonProps {whenClicked: () => void;}
+const RedButton = ({whenClicked}: RedButtonProps) =>
+    <button className="red" onClick={whenClicked}>Red</button>;
 ```
+[Run the code](http://codepen.io/jbcazaux/pen/jBENyd/)
 ---
 
 template: default
@@ -869,10 +919,15 @@ render() {
 	return <div style={mystyle}>
 }
 ```
+```typescript
+render() {
+	return <div style={{backgroundColor: '#F0ABCD'}}>
+}
+```
 Sinon une CSS globale, ou une CSS par composant (Webpack powered)
 
 ```typescript
-let css = require('./mycomponent.css');
+const css = require('./mycomponent.css');
 ```
 ---
 
@@ -885,78 +940,12 @@ Adaptation des composants bootstrap à React
 La documentation
 * [https://react-bootstrap.github.io/components.html](https://react-bootstrap.github.io/components.html)
 * [http://getbootstrap.com/components/](http://getbootstrap.com/components/)
-
----
-
-template: default
-layout: true
-
-### Tips
-
----
-# Caractères spéciaux
-```typescript
-<span> Jet d{String.fromCharCode(39)}eau</span>
-```
-
----
-
-# JSX if (else)
-if
-```typescript
-{this.state.user && <div>{this.state.user.login}</div>}
-```
-not
-```typescript
-{this.state.user || <div>No User</div>}
-```
-if-else
-```typescript
-{this.state.user ? <div>{this.state.user.login}</div> : <div>No User</div>}
-```
----
-
-# Children
-
-```typescript
-interface Props {
-    readonly title: string;
-}
-
-export class ButtonApp extends React.Component<Props, void> {
-    render() {
-        return <Button {...this.props}>hello world</Button>
-    }
-}
-```
-```typescript
-interface ButtonProps {
-    readonly title: string;
-    readonly children?: any;
-}
-
-export const Button = ({title, children}: ButtonProps) => (
-    <button title={title}>
-        {children}
-    </button>
-);
-```
----
-layout: false
-
-#TP-03
-## Liste des étudiants
-1. Installer react-bootstrap et ses définitions de type
-2. Afficher un champ texte qui permet de filtrer les éléments d'un tableau
-3. Afficher le nom de l'étudiant sur lequel on a cliqué, ou un message si aucun n'est sélectionné
-4. Bonus ES6: Calculer de façon élégante la moyenne des notes d'un élève (reduce)
 ---
 
 # Rappels
 * Un composant a des propriétés et des états
 * Un composant stateless est plus maintenable et testable
 * On ne peut passer des propriétés qu'aux enfants (ce n'est pas de l'héritage;) )
-
 ---
 layout: false
 class: center, middle, inverse
