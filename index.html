@@ -136,16 +136,6 @@ class: center, middle, inverse
 #### [http://codox.fr/react-ts-bbl](http://codox.fr/react-ts-bbl)
 
 ---
-## Versions
-
-```json
-[...]
-"typescript": "2.2.1",
-"react": "15.4.2",
-"webpack": "2.2.1",
-[...]
-```
----
 
 # Contenu
 
@@ -186,10 +176,29 @@ const ttc = addTva(15);
 # ~~var~~, let, const
 
 ```javascript
+if (true === false) {
+    var foo = 1;
+}
+foo = 2;
+```
+```javascript
+let foo;
+if (true === false) {
+    foo = 1;
+}
+foo = 2;
+```
+
+---
+
+# ~~var~~, let, const
+
+```javascript
 const user = {};
 user.name = 'john'; // ok ?
 user = {name: 'lea'}; // ok ?
-
+```
+```javascript
 const arr = ['a'];
 arr.push('b'); // ok ?
 arr = ['a', 'b']; // ok ?
@@ -244,8 +253,8 @@ console.log(squares);
 # Attention !
 
 Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http://www.webbrowsercompatibility.com/es6/desktop/)
+* Shim (Array.map(), Array.find(), ...)
 * Transpiler (=>, let, const, ...)
-* Shim (Array.find(), ...)
 ---
 
 # Spread operator
@@ -255,6 +264,7 @@ const odd = [1, 3, 5, 7, 9];
 const even = [2, 4, 6, 8]
 const all = [0];
 
+// arr.push([element1[, ...[, elementN]]])
 all.push(odd);
 all.push(even);
 
@@ -269,6 +279,24 @@ const odd = [1, 3, 5, 7, 9];
 const even = [2, 4, 6, 8]
 const all = [0];
 
+// arr.push([element1[, ...[, elementN]]])
+for (let i = 0; i < odd.length; i++) {
+    all.push(odd);
+}
+for (let i = 0; i < even.length; i++) {
+    all.push(even);
+}
+console.log(all) // ?
+```
+---
+# Spread operator
+
+```javascript
+const odd = [1, 3, 5, 7, 9];
+const even = [2, 4, 6, 8]
+const all = [0];
+
+// arr.push([element1[, ...[, elementN]]])
 all.push(...odd);
 all.push(...even);
 
@@ -286,9 +314,12 @@ console.log(a); // ?
 # Destructuring
 
 ```javascript
-const user = {};
-user.firstname = 'john';
-user.lastname = 'doe';
+const user = {
+    firstname: 'john',
+    nickname: 'ninja',
+    lastname: 'doe',
+    age: 21
+};
 
 function displayUser(user) {
     return user.firstname.concat(' ').concat(user.lastname);
@@ -298,9 +329,12 @@ function displayUser(user) {
 # Destructuring
 
 ```javascript
-const user = {};
-user.firstname = 'john';
-user.lastname = 'doe';
+const user = {
+    firstname: 'john',
+    nickname: 'ninja',
+    lastname: 'doe',
+    age: 21
+};
 
 function displayUser(user) {
     return user.firstname.concat(' ').concat(user.lastname);
@@ -314,9 +348,12 @@ function displayUser({firstname, lastname}) {
 # Destructuring
 
 ```javascript
-const user = {};
-user.firstname = 'john';
-user.lastname = 'doe';
+const user = {
+    firstname: 'john',
+    nickname: 'ninja',
+    lastname: 'doe',
+    age: 21
+};
 
 function displayUser(user) {
     return user.firstname.concat(' ').concat(user.lastname);
@@ -332,8 +369,8 @@ const displayUser = ({firstname, lastname}) =>
 ---
 # Shorthand Notation
 ```javascript
-const foo = 1;
-const bar = 2;
+const foo = 42;
+const bar = 1;
 
 const longer = {
     foo: foo,
@@ -343,8 +380,8 @@ const longer = {
 ---
 # Shorthand Notation
 ```javascript
-const foo = 1;
-const bar = 2;
+const foo = 42;
+const bar = 1;
 
 const longer = {
     foo: foo,
@@ -382,6 +419,7 @@ uniq.length // ?
 # Rappels
 
 * currying
+
 ```javascript
 let add = function(x) {
     return function(y) {
@@ -394,6 +432,7 @@ add(2)(3) // ???
 # Rappels
 
 * currying
+
 ```javascript
 let add = function(x) {
     return function(y) {
@@ -410,6 +449,7 @@ add2(3); // = ?
 # Rappels
 
 * currying
+
 ```javascript
 let add = function(x) {
     return function(y) {
@@ -422,6 +462,7 @@ let add = x => y => x + y // WTF ?!
 # Rappels
 
 * currying
+
 ```javascript
 let add = function(x) {
     return function(y) {
