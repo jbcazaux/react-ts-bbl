@@ -253,7 +253,7 @@ console.log(squares);
 # Attention !
 
 Pas totalement supporté par les navigateurs : [Tableau de compatibilité](http://www.webbrowsercompatibility.com/es6/desktop/)
-* Shim (Array.map(), Array.find(), ...)
+* Shim (Array.map(), Array.reduce(), ...)
 * Transpiler (=>, let, const, ...)
 ---
 
@@ -281,10 +281,10 @@ const all = [0];
 
 // arr.push([element1[, ...[, elementN]]])
 for (let i = 0; i < odd.length; i++) {
-    all.push(odd);
+    all.push(odd[i]);
 }
 for (let i = 0; i < even.length; i++) {
-    all.push(even);
+    all.push(even[i]);
 }
 console.log(all) // ?
 ```
