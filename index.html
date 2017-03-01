@@ -675,7 +675,7 @@ hello.tsx
 import * as React from 'react';
 
 interface Props {
-    name: string;
+    readonly name: string;
 }
 export default class Hello extends React.Component<Props, void> {
     render() {
@@ -755,9 +755,9 @@ En plus des **props**, le composant a donc un **state**.
 
 # Props vs State
 
-**Props**: Les données sont passées par les parents
+**Props**: Les données sont passées par les parents.
 
-**State**: Les données sont définies par le composant lui-même
+**State**: Les données sont définies par le composant lui-même.
 
 
 * Bonne pratiques:
@@ -858,6 +858,17 @@ render() {
 ---
 
 # JSX if (else)
+Sans JSX
+```typescript
+render() {
+    if (this.props.user) {
+        return <div>{this.props.user.login}</div>
+    } else {
+        return <div>No User</div>
+    }
+}
+```
+
 if
 ```jsx
 {this.state.user && <div>{this.state.user.login}</div>}
@@ -881,7 +892,7 @@ layout: true
 # onClick
 ```typescript
 interface State {
-    count: number;
+    readonly count: number;
 }
 class ClickCounter extends React.Component<void, State> {
   constructor(props) {
@@ -905,6 +916,33 @@ class ClickCounter extends React.Component<void, State> {
 ```
 [Run the code](http://codepen.io/jbcazaux/pen/oZNrdQ/)
 ---
+
+# onClick
+```typescript
+interface State {
+    readonly count: number;
+}
+class ClickCounter extends React.Component<void, State> {
+  constructor(props) {
+    super(props);
+    this.state = {count: 0};
+  }
+
+  handleClick() {
+    this.setState(prevState => ({count: ++prevState.count}));
+  }
+
+  render() {
+    return (
+      <div>
+        Click : {this.state.count}
+        <button onClick={() => this.handleClick()}>Click</button>
+      </div>
+    );
+  }
+}
+```
+---
 # Passer des callbacks
 
 * Découper l'UI en composants réutilisables
@@ -916,7 +954,7 @@ class ClickCounter extends React.Component<void, State> {
 
 # Passer des callbacks
 ```typescript
-interface State {count: number;}
+interface State {readonly count: number;}
 class ClickCounter extends React.Component<void, State> {
     constructor() {
         super();
@@ -935,7 +973,7 @@ class ClickCounter extends React.Component<void, State> {
     }
 }
 
-interface RedButtonProps {whenClicked: () => void;}
+interface RedButtonProps {readonly whenClicked: () => void;}
 const RedButton = ({whenClicked}: RedButtonProps) =>
     <button className="red" onClick={whenClicked}>Red</button>;
 ```
@@ -998,6 +1036,22 @@ template: default
 layout: true
 
 ### Flux & Redux
+---
+
+# Flux
+
+Comment passer des informations aux petits enfants ?
+![why redux diagram](./whyredux.png)
+
+
+---
+
+# How To
+
+![best practices](./flux-bestpractice.png)
+
+* On ne met pas à jour directement les autres composants
+* On passe par le store (redux), les stores (flux), les observables (RxJs), ...
 
 ---
 
@@ -1008,18 +1062,9 @@ layout: true
 * Dispatcher: Répartir les actions dans les stores
 * View: Les composants UI
 
-![flux acton diagram](images/flux.png)
+![flux acton diagram](./flux.png)
 
 **Le flux ne va que dans un seul sens !** (~~2-way binding~~)
-
----
-
-# Bien / Pas bien
-
-![best practices](images/flux-bestpractice.png)
-
-* On ne met pas à jour directement les autres composants
-* On passe par le store (redux), les stores (flux), les observables (RxJs), ...
 
 ---
 
@@ -1033,7 +1078,7 @@ layout: true
     * les *reducers* prennent en entrée l'état précédent et une action
     * ils retournent le nouvel état dans un objet immutable
 
-![redux](images/redux.png)
+![redux](redux.png)
 
 ---
 
@@ -1060,7 +1105,7 @@ export const incrementor = (inc: number): CounterAction => {
 };
 ```
 
-![redux](images/redux.png)
+![redux](redux.png)
 ---
 
 # Reducer
@@ -1078,7 +1123,7 @@ export const display =
 };
 ```
 Le *state* est en read-only !
-![redux](images/redux.png)
+![redux](./redux.png)
 ---
 
 # Store
@@ -1096,7 +1141,7 @@ interface Store<S> {
 * On peut être prévenu des changements du store via *subscribe(listener)*
 * On se désenregistre avec la méthode retournée par *subscribe*
 
-![redux](images/redux.png)
+![redux](./redux.png)
 
 ---
 layout: false
@@ -1111,75 +1156,6 @@ layout: true
 ### React & Redux
 ---
 
-# Composition de reducers - Approche naïve
-```typescript
-interface State = {readonly user: string; readonly counter: number;};
-const initialState = {user: '', counter: 0};
-export const myreducer =
-(state = initialState, action: any) => {
-    switch (action.type) {
-        case 'SET_USER':
-           return Object.assign({}, state, {user: action.user});
-        case 'INCREMENT':
-           return Object.assign({}, state, {counter: state.counter + 1});
-        case 'DECREMENT':
-           return Object.assign({}, state, {counter: state.counter - 1});
-        default:
-           return state;
-    }
-};
-```
-Ca peut faire lourd...!
-
----
-
-# Composition de reducers - Découpage
-```typescript
-export const user =
-(state: string = '', action: UserAction) => {
-    switch (action.type) {
-        case 'SET_USER':
-           return action.user;
-        default:
-           return state;
-    }
-};
-export const counter =
-(state: number = 0, action: CounterAction) => {
-    switch (action.type) {
-        case 'INCREMENT':
-           return state + 1;
-        case 'DECREMENT':
-           return state - 1;
-        default:
-           return state;
-    }
-};
-```
----
-
-# Composition de reducers - Effet Waouh
-```typescript
-interface State = {readonly user: string; readonly counter: number;};
-const initialState = {user: 'nobody', counter: 0};
-export const myreducer =
-(state = initialState, action: any) => {
-    return {
-        user: user(state.user, action),
-        counter: counter(state.counter, action)
-    }
-};
-```
-Et avec un peu de magie...
-```typescript
-import { combineReducers } from 'redux'
-export const myreducer = combineReducers({
-    user,
-    counter
-});
-```
----
-
 # Récapitulatif
 
 - Actions
@@ -1188,7 +1164,7 @@ export const myreducer = combineReducers({
 - Composants React
 - Il reste à lier les composants au store !
 
-![redux](images/redux.png)
+![redux](./redux.png)
 
 ---
 
@@ -1197,7 +1173,7 @@ export const myreducer = combineReducers({
 * Les composants stateless sont simples à maintenir
 * Séparation des responsabilités
 
-![react-redux](images/conteneur-pres.png)
+![react-redux](./conteneur-pres.png)
 
 ---
 
@@ -1212,106 +1188,6 @@ export const myreducer = combineReducers({
 | To read data  | Read data from props	            | Subscribe to Redux state                      |
 | To change data| Invoke callbacks from props       | Dispatch Redux actions                        |
 | Are written	| By hand                           | Usually generated by React Redux              |
-
----
-
-# Connect
-
-* Le composant de présentation est comme les composants simples rencontrés jusque la (sans appels ajax)
-* Le composant conteneur va être généré automatiquement, ** mais **
-    * il faut décrire comment créer les *props* à partir des données du *store*: **mapStateToProps(state: State): StateProps {...}**
-    * il faut implémenter les callbacks qui seront injectés dans les *props*: **mapDispatchToProps(dispatch: Function): DispatchProps {...}**
-
-```typescript
-import {connect} from 'react-redux';
-
-export const MyComponent =
-    connect(mapStateToProps, mapDispatchToProps)(MyPresentationalComponent);
-```
----
-
-## Composant de présentation:
-```typescript
-export const SelectCodePostal_ = ({cps, currentCp, onSelectCp}: Props) => (
-    <FormControl componentClass="select"
-                 onChange={onSelectCp}
-                 value={currentCp}>
-        {
-            cps.map((cp: number) => <option key={cp} value={cp}>{cp}</option> )
-        }
-    </FormControl>
-);
-```
----
-
-## Conteneur
-```typescript
-interface StateProps {
-    readonly cps: ReadonlyArray<number>;
-    readonly currentCp: number;
-}
-interface DispatchProps {
-    onSelectCp: (e: Event) => void;
-}
-type Props = StateProps & DispatchProps;
-
-const mapStateToProps = (state: State): StateProps => {
-    const cpsOfAgence = state.codesPostaux
-        .map((cp: CodePostal) => cp.id);
-    return {cps: cpsOfAgence, currentCp: state.codePostal.id};
-};
-
-const mapDispatchToProps = (dispatch: Function): DispatchProps => {
-    return {
-        onSelectCp: (e: Event) => {
-            let codePostalId =
-                new CodePostalId(parseInt((e.target as any).value));
-            dispatch(setCodePostalId(codePostalId));
-        }
-    };
-};
-export const SelectCodePostal =
-    connect(mapStateToProps, mapDispatchToProps)(SelectCodePostal_);
-```
----
-
-# Passer le store
-
-Tous les conteneurs de l'application doivent avoir accès au store.
-```typescript
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import {reducer, State} from './reducers/index';
-import {App} from './components/app';
-
-const store = createStore(reducer);
-
-ReactDOM.render(
-    <Provider store={store}>
-        <App/>
-    </Provider>,
-    document.getElementById('app')
-);
-```
----
-layout: false
-
-#TP-04
-## Liste de courses - bis
-1. Installer les packages redux et react-redux, ainsi que leurs '@types'
-2. Reprendre le TP-02 mais en utilisant le *state* du store plutot que le *state* du composant,
-et en initialisant la liste sans chargement asynchrone (liste en dur).
- * Créer l'interface **State** du *state* du *store* (la liste d'items)
- * Creer une interface **ItemsAction**
- * Créer un *action creator* **setItems** qui renvoie une **ItemAction**
- * Créer un reducer **items** qui prend une **ItemAction** en entrée
- * Créer un reducer global à l'aide de **combineReducer**
- * Créer le *contener* et le *presentational component*
- * Passer un titre dans les ownProps (et donc créer l'interface **OwnProps**)
-3. Bonus: Créer un bouton qui permet d'ajouter des items au store.
-
 ---
 
 template: default
@@ -1320,88 +1196,20 @@ layout: true
 ### Actions asynchrones
 ---
 
-## Généralités
+# Généralités
 
 * Redux ne permet que de dispatcher des objets
 * **redux-thunk** permet de passer une fonction, et donc des actions asynchrones ou des actions avec conditions.
 C'est un **middleware**.
-* Avec **TypeScript** on se fait quelques noeuds au cerveau ;)
 * C'est plus élégant que les actions retournent des **promesses**
 
 ---
 
-## Middleware
-```typescript
-import {reducer} from './reducers/index';
-import {createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-
-const store = createStore(
-    reducer,
-    applyMiddleware(thunk)
-);
-
-```
-
----
-
-## Promesses
-
-```typescript
-const getItemsId: (() => Promise<number[]>) =
-    () => axios.get<Item[]>('src/items.json')
-        .then(resp => resp.data)
-        .then((items: Item[]) => items.map(item => item.id))
-        .catch((error: any) => console.log(error.toString()))
-```
-
----
-
-## Sans TypeScript
-```javascript
-const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
-
-function incrementCreator(inc) {
-  return {
-    type: INCREMENT_COUNTER,
-    inc: inc
-  };
-}
-
-function incrementAsyncCreator(inc) {
-  return dispatch => {
-    setTimeout(() => {
-      dispatch(incrementCreator(inc));
-    }, 1000);
-  };
-}
-
-
-```
-
----
-
-## Avec TypeScript
+# ThunkAction
 
 Une **ThunkAction** est une fonction qui reçoit en entrée les méthodes *dispatch()* et *getState()*, et retourne le
 résultat de **dispatch()**
-```typescript
-export type ThunkAction<R, S, E> =
-        (dispatch: Dispatch<S>, getState: () => S, extraArgument: E) => R;
-
-	export interface Dispatch<S> {
-		<R, E>(asyncAction: ThunkAction<R, S, E>): R;
-	}
-
-```
 Dans le code, on va écrire des **ThunkActionCreator**
-```typescript
-type ThunkAction2<R> = ThunkAction<R, State, void>;
-export type ThunkActionCreator<R> = (...args: any[]) => ThunkAction2<R>;
-// Ou en une ligne
-export type ThunkActionCreator<R> = (...args: any[]) => ThunkAction<R, State, void>;
-```
-
 ```typescript
 export const fetchItems: ThunkActionCreator<void> = () =>
     (dispatch, getState) => getItems(getState().userId)
@@ -1412,98 +1220,20 @@ export const fetchItems: ThunkActionCreator<void> = () =>
             console.log(error);
         });
 ```
-
 ---
-layout: false
-
-#TP-05
-## Liste de courses - ter
-1. Installer redux-thunk et le '@types'
-2. Reprendre le TP-04 mais faisant un appel asynchrone (http) pour charger la liste d'items
-3. Bonus: Faire une action qui avant d'ajouter l'item au store, applique la TVA sur le prix lors d'un ajout d'item par le formulaire
-
----
-
-# Bravo !
-* C'était la partie la plus compliquée
-* On sait créer des compostants et leur passer des propriétés
- * Depuis leur composant parent
- * Depuis depuis un l'état 'local' (**LocalState**)
- * Depuis l'état du **store** (**State**)
- * Depuis un composant (grand)n-parent par le context... ou pas !
-
----
-
-
 template: default
 layout: true
 
 ### Context
 ---
 
-## Mises en garde
+# Mises en garde
 
 * On peut passer des objets à ses composants enfants (n'importe où dans la hiérarchie).
 * Des librairies sont basées la dessus, mais ce n'est pas officiellement supporté (le fonctionnement pourra varier, être supprimé).
 La doc par d'**experimental API** !
 * *react-redux* fonctionne grâce à ca (le store est passé à tous les enfants).
 * ** A n'utiliser qu'en cas d'urgence ;)**
-
----
-
-## PropTypes
-
-* Nécessaires pour faire fonctionner le *context*
-* Permet de décrire (typer, rendre obligatoire, ...) des propriétés
-* Pas vraiment utile quand on fait du typescript !
-
----
-
-## Utilisation
-Dans le composant parent, il faut implémenter *getChildContext()*
-```typescript
-getChildContext(): MyContext  {
-    return {color: 'purple', user: new User(0, 'admin')};
-}
-```
-Puis définir les *childContextTypes*, toujours dans le composant parent
-```typescript
-static childContextTypes = {
-    color: React.PropTypes.string.isRequired,
-    user: React.PropTypes.object.isRequired
-};
-```
-
----
-
-## Utilisation
-Dans le composant enfant, on peut typer le *context*, il faut déclarer les *contextTypes*, et là on
-a accès au context dans le composant.
-```typescript
-class Child extends React.Component<void, void> {
-
-    context: MyContext;
-
-    static contextTypes = {
-        color: React.PropTypes.string.isRequired,
-        user: React.PropTypes.object.isRequired
-    };
-
-    render() {
-        return <div>user = {this.context.user.login}</div>;
-    }
-}
-```
-
----
-layout: false
-
-#TP-06
-## Contexte
-Le but est de passer une couleur et un **User** d'un composant à son composant 'petit-fils'
-1. Déclarer un context dans le composant grand parent (Large), avec une couleur et un User.
-2. Afficher les informations passées dans le *context* dans le composant petit-fils (Small)
-
 ---
 
 template: default
@@ -1513,7 +1243,7 @@ layout: true
 
 ---
 
-## Jest & Enzyme
+# Jest & Enzyme
 
 L'idée est de tester les composants de *présentation*, avec leurs états et leurs propriétés.
 
@@ -1533,7 +1263,7 @@ describe(MyComponent, () => {
 ```
 ---
 
-## Quelques exemples
+# Quelques exemples
 
 Vérifier que le composant s'affiche avec ses sous composants
 ```typescript
@@ -1559,7 +1289,7 @@ expect(mockOnChange).toBeCalledWith(myParam);
 ```
 ---
 
-## Quelques exemples
+# Quelques exemples
 
 Simuler un événement
 ```typescript
@@ -1574,20 +1304,33 @@ Récupérer l'état
 ```typescript
 expect(component.state('name')).toEqual('mon nom');
 ```
+---
+
+class: center, middle, inverse
+layout: false
+# La suite
+---
+
+template: default
+layout: true
+
+### La suite
+
 
 ---
-layout: false
 
-#TP-07
-## Les tests
-Le but est de tester complètement le TP-03
-1. Installer jest, enzyme, react-addons-test-utils (--save-dev) et leurs définitions de type
-2. Créer un fichier .test.ts par composant
-3. *StudentDetails*: Vérifier le texte pour les 2 cas (Student.NULL ou non)
-4. *Filter*: Vérifier que le callback est appelé lors d'un événement *change*
-5. *StudenstTable*: Vérifier le nombre de ligne du tableau suivant le nombre de *Student* passés. Vérifier également le callback.
-6. *StudentsApp*: Vérifier que le composant et ses sous composants sont affichés, puis vérifier l'impact des méthodes *handleSelectStudent()* et
-*handleFilterChange()* sur le *state*. Enfin valider que *filteredStudents()* renvoie les bons éléments pour un filtre donné.
+# Librairies, outils, features
+
+- Le routing (react-router)
+- Injection de dépendances
+- Isomorphisme
+- après redux (saga, mobx, redux-rs, ...)
+- les outils (debugging, performances, ...)
+---
+
+class: center, middle, inverse
+layout: false
+# Des questions ?
 
 
 </textarea>
