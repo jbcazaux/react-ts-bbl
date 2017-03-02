@@ -321,9 +321,10 @@ const user = {
     age: 21
 };
 
-function displayUser(user) {
+function getUserName(user) {
     return user.firstname.concat(' ').concat(user.lastname);
 }
+console.log(getUserName(user));
 ```
 ---
 # Destructuring
@@ -336,13 +337,14 @@ const user = {
     age: 21
 };
 
-function displayUser(user) {
+function getUserName(user) {
     return user.firstname.concat(' ').concat(user.lastname);
 }
 
-function displayUser({firstname, lastname}) {
+function getUserName({firstname, lastname}) {
     return firstname.concat(' ').concat(lastname);
 }
+console.log(getUserName(user));
 ```
 ---
 # Destructuring
@@ -355,16 +357,18 @@ const user = {
     age: 21
 };
 
-function displayUser(user) {
+function getUserName(user) {
     return user.firstname.concat(' ').concat(user.lastname);
 }
 
-function displayUser({firstname, lastname}) {
+function getUserName({firstname, lastname}) {
     return firstname.concat(' ').concat(lastname);
 }
 
-const displayUser = ({firstname, lastname}) =>
+const getUserName = ({firstname, lastname}) =>
     firstname.concat(' ').concat(lastname);
+
+console.log(getUserName(user));
 ```
 ---
 # Shorthand Notation
@@ -586,7 +590,7 @@ let user1 = new User(1, 'toto');
 ```
 ```typescript
 class Minus implements Operation<number> {
-    calc = (a: number, b: number) => a - b;
+    calc = (a, b) => a - b;
 }
 ```
 ---
@@ -644,6 +648,15 @@ react                             dt     http://facebook.github.io/react/       
 react-bootstrap                   dt     https://github.com/react-bootstrap/react-bootstrap                        1        2016-08-06T07:24:14.000Z
 $> typings install --save --global dt~react
 ```
+---
+
+# Comment ça marche ?
+
+- Code transpilé en es5 ou es6
+- ts-loader ou babel dans webpack
+- fichier de configuration tsconfig.json
+
+![tsconfig](./tsconfig.png)
 ---
 layout: false
 class: center, middle, inverse
@@ -747,7 +760,7 @@ shouldComponentUpdate & Virtual-DOM
 On peut stocker dans le composant:
 - l'état d'un formulaire (champs texte, checkbox, ...)
 - les data récupérées d'un webservice et qui vont être affichées
-- l'état du composant (normal, réduit, ...)
+- l'état du composant (normal, réduit, inactif, ...)
 - ...
 
 En plus des **props**, le composant a donc un **state**.
@@ -1043,6 +1056,13 @@ layout: true
 Comment passer des informations aux petits enfants ?
 ![why redux diagram](./whyredux.png)
 
+---
+
+# Flux
+
+Comment passer des informations aux petits enfants ?
+![why redux diagram](./whyredux2.png)
+
 
 ---
 
@@ -1208,8 +1228,9 @@ C'est un **middleware**.
 # ThunkAction
 
 Une **ThunkAction** est une fonction qui reçoit en entrée les méthodes *dispatch()* et *getState()*, et retourne le
-résultat de **dispatch()**
-Dans le code, on va écrire des **ThunkActionCreator**
+résultat de **dispatch()**.
+
+Dans le code, on va écrire des **ThunkActionCreator**.
 ```typescript
 export const fetchItems: ThunkActionCreator<void> = () =>
     (dispatch, getState) => getItems(getState().userId)
@@ -1314,8 +1335,7 @@ layout: false
 template: default
 layout: true
 
-### La suite
-
+### La suite... en formation :)
 
 ---
 
@@ -1331,6 +1351,7 @@ layout: true
 class: center, middle, inverse
 layout: false
 # Des questions ?
+#### [codox.fr](http://codox.fr)
 
 
 </textarea>
