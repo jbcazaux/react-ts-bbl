@@ -171,24 +171,33 @@ let foo = 'bar';
 const MAX = 10;
 const ttc = addTva(15);
 ```
+
+**let** vs. **const** ?
+---
+
+# ~~var~~, let, const
+```javascript
+let foo = 'bar';
+const MAX = 10;
+const ttc = addTva(15);
+```
+
+**let** vs. **const** ?
+
+0 **var**, 44 **let**, 997 **const**
+
 ---
 
 # ~~var~~, let, const
 
 ```javascript
-if (true === false) {
-    var foo = 1;
+if (true) {
+    var i = 1;
+} else {
+    var j = 2;
 }
-foo = 2;
+console.log(i, j);
 ```
-```javascript
-let foo;
-if (true === false) {
-    foo = 1;
-}
-foo = 2;
-```
-
 ---
 
 # ~~var~~, let, const
