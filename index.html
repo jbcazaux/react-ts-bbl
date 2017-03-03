@@ -204,13 +204,13 @@ console.log(i, j);
 
 ```javascript
 const user = {};
-user.name = 'john'; // ok ?
-user = {name: 'lea'}; // ok ?
+user.name = 'john'; // (1)
+user = {name: 'lea'}; // (2)
 ```
 ```javascript
 const arr = ['a'];
-arr.push('b'); // ok ?
-arr = ['a', 'b']; // ok ?
+arr.push('b'); // (3)
+arr = ['a', 'b']; // (4)
 ```
 ---
 
@@ -637,6 +637,8 @@ class User {
 ```
 ```typescript
 let apps: ReadonlyArray<string> = ['app1', 'app2'];
+app.push('app3'); // (1)
+app = ['app1', 'app2', 'app3']; // (2)
 ```
 
 ---
@@ -679,7 +681,12 @@ layout: true
 ### Intro
 ---
 
-#Hello world
+# Tout est composant
+
+![components](./components.png)
+---
+
+# Hello world
 index.tsx
 ```typescript
 import * as React from 'react';
@@ -747,21 +754,12 @@ layout: true
 * **componentDidUpdate(**nextProps: object, nextState: object**)**: job done
 * **componentWillUnmount()**: bye bye !
 ---
-template: default
-layout: true
-
-### Principes généraux
----
-
-# Tout est composant
-
-![components](./components.png)
----
 
 # On ne redessine que le nécessaire
 shouldComponentUpdate & Virtual-DOM
 
 ![update](./should-component-update.png)
+
 ---
 
 # Local State
@@ -867,16 +865,6 @@ render() {
 }
 ```
 [Run the code](http://codepen.io/jbcazaux/pen/YZzmvq)
----
-
-# Caractères spéciaux
-```typescript
-render() {
-    return (
-        <span> Jet d{String.fromCharCode(39)}eau</span>
-    )
-}
-```
 ---
 
 # JSX if (else)
